@@ -21,28 +21,49 @@ namespace DayNightFix
 		public static int PatchFile(string fileName, bool notDryRun = false) {
 			var sb = new StringBuilder();
 			var lines = File.ReadAllLines(fileName, TextEncoding.GetSystemEncodingFromFile(fileName));
+			var isB3d = fileName.EndsWith(".b3d", StringComparison.OrdinalIgnoreCase);
 			int count = 0;
-			foreach (var line in lines){
-				var tokens = line.Split(new char[]{',', ' '}, StringSplitOptions.RemoveEmptyEntries);
-				if (tokens.Length > 2) {
-					var t0 = tokens[0].Trim().ToLower();
-					var t1 = tokens[1].Trim().ToLower();
-					var t2 = tokens[2].Trim().ToLower();
-				    if ((t0 == "load" || t0 == "loadtexture") && (t1 != "" && t2 != "")) {
+			foreach (var line in lines)
+			{
+				string command;
+				var tokens = line.Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries);
+				if (isB3d && tokens.Length > 0) {
+					// b3d command are separated with spaces
+					var cmdIdx = line.IndexOf(' ');
+					if (cmdIdx != -1) {
+						command = tokens[0].Substring(0, cmdIdx).Trim().ToLower();
+						tokens[0] = tokens[0].Substring(cmdIdx + 1).Trim();
+					} else {
+						command = null;
+					}
+				} else if(tokens.Length > 0) {
+					command = tokens[0].Trim().ToLower();
+					for (int i = 0; i < tokens.Length-1; i++) {
+						tokens[i] = tokens[i+1].Trim();
+					}
+					Array.Resize(ref tokens, tokens.Length - 1);
+				} else {
+					command = null;
+				}
+
+				if (command != null && tokens.Length > 1) {
+					var t1 = tokens[0].ToLower();
+					var t2 = tokens[1].ToLower();
+				    if ((command == "load" || command == "loadtexture") && (t1 != "" && t2 != "")) {
 						if (t1 == t2) {
-							if (t0 == "load") {
-								sb.AppendLine("Load " + tokens[1]);
+							if (isB3d) {
+								sb.AppendLine("Load " + tokens[0]);
 								sb.AppendLine("EmissiveColor 255, 255, 255");
 							} else {
-								sb.AppendLine("LoadTexture, " + tokens[1]);
+								sb.AppendLine("LoadTexture, " + tokens[0]);
 								sb.AppendLine("SetEmissiveColor, 255, 255, 255");
 							}
 						} else {
-							if (t0 == "load") {
-								sb.AppendLine("Load " + tokens[1] + ", " + tokens[2]);
+							if (isB3d) {
+								sb.AppendLine("Load " + tokens[0] + ", " + tokens[1]);
 								sb.AppendLine("EmissiveColor 255, 255, 255");
 							} else {
-								sb.AppendLine("LoadTexture, " + tokens[1] + ", " + tokens[2]);
+								sb.AppendLine("LoadTexture, " + tokens[0] + ", " + tokens[1]);
 								sb.AppendLine("SetEmissiveColor, 255, 255, 255");
 							}
 						}
