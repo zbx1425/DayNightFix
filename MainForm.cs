@@ -151,7 +151,7 @@ namespace DayNightFix
 		
 		void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://www.zbx1425.tk");
+			System.Diagnostics.Process.Start("https://www.zbx1425.cn");
 		}
 		
 		void FileListViewDoubleClick(object sender, EventArgs e)

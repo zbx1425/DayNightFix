@@ -135,7 +135,7 @@ namespace DayNightFix
 			// 
 			this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.linkLabel1.AutoSize = true;
-			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(49, 14);
+			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(18, 14);
 			this.linkLabel1.Location = new System.Drawing.Point(13, 321);
 			this.linkLabel1.Name = "linkLabel1";
 			this.linkLabel1.Size = new System.Drawing.Size(400, 19);
