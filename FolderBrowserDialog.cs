@@ -58,7 +58,7 @@ namespace DayNightFix
 		/// <returns>true if the user clicks OK</returns>
 		public bool Show(IntPtr hWndOwner)
 		{
-			var result = Environment.OSVersion.Version.Major >= 6
+			var result = Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6
 				? VistaDialog.Show(hWndOwner, InitialDirectory, Title)
 				: ShowXpDialog(hWndOwner, InitialDirectory, Title);
 			_fileName = result.FileName;
